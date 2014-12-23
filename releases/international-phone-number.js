@@ -68,7 +68,7 @@
           }
           if (options.keepModelClean) {
             return element.intlTelInput('getCleanNumber');
-          } else if (options.keepModelClean) {
+          } else if (options.formatModelWithSpace) {
             selectedCountryData = element.intlTelInput("getSelectedCountryData");
             cleanNumber = element.intlTelInput("getCleanNumber");
             prefixLength = selectedCountryData.dialCode.length + 1;

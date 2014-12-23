@@ -60,7 +60,7 @@ angular.module("internationalPhoneNumber", []).directive 'internationalPhoneNumb
       return value if !value
       if options.keepModelClean
         element.intlTelInput('getCleanNumber')
-      else if options.keepModelClean
+      else if options.formatModelWithSpace
         selectedCountryData = element.intlTelInput("getSelectedCountryData")
         cleanNumber = element.intlTelInput("getCleanNumber")
         prefixLength = selectedCountryData.dialCode.length + 1
