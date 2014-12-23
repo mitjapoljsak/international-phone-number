@@ -28,7 +28,8 @@
           preferredCountries: ['us', 'gb'],
           responsiveDropdown: false,
           utilsScript: "",
-          keepModelClean: false
+          keepModelClean: false,
+          formatModelWithSpace: false
         };
         angular.forEach(options, function(value, key) {
           var option;
@@ -61,11 +62,17 @@
           element.intlTelInput('loadUtils', 'bower_components/intl-tel-input/lib/libphonenumber/build/utils.js');
         }
         ctrl.$parsers.push(function(value) {
+          var cleanNumber, prefixLength, selectedCountryData;
           if (!value) {
             return value;
           }
           if (options.keepModelClean) {
             return element.intlTelInput('getCleanNumber');
+          } else if (options.keepModelClean) {
+            selectedCountryData = element.intlTelInput("getSelectedCountryData");
+            cleanNumber = element.intlTelInput("getCleanNumber");
+            prefixLength = selectedCountryData.dialCode.length + 1;
+            return cleanNumber.substring(0, prefixLength) + ' ' + cleanNumber.substring(prefixLength);
           } else {
             return value.replace(/[^\d]/g, '');
           }
@@ -75,7 +82,7 @@
             ctrl.$setValidity('international-phone-number', element.intlTelInput("isValidNumber"));
           } else {
             value = '';
-            delete ctrl.$error['international-phone-number'];
+            ctrl.$setValidity('international-phone-number', true);
           }
           return value;
         });

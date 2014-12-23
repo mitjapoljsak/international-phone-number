@@ -20,16 +20,17 @@ angular.module("internationalPhoneNumber", []).directive 'internationalPhoneNumb
         value.toString().replace(/[ ]/g, '').split(',')
 
     options =
-      autoFormat:         true
-      autoHideDialCode:   true
-      defaultCountry:     ''
-      nationalMode:       false
-      numberType:         ''
-      onlyCountries:      undefined
-      preferredCountries: ['us', 'gb']
-      responsiveDropdown: false
-      utilsScript:        ""
-      keepModelClean:     false
+      autoFormat:           true
+      autoHideDialCode:     true
+      defaultCountry:       ''
+      nationalMode:         false
+      numberType:           ''
+      onlyCountries:        undefined
+      preferredCountries:   ['us', 'gb']
+      responsiveDropdown:   false
+      utilsScript:          ""
+      keepModelClean:       false
+      formatModelWithSpace: false
 
     angular.forEach options, (value, key) ->
       option = eval("attrs.#{key}")
@@ -59,6 +60,11 @@ angular.module("internationalPhoneNumber", []).directive 'internationalPhoneNumb
       return value if !value
       if options.keepModelClean
         element.intlTelInput('getCleanNumber')
+      else if options.keepModelClean
+        selectedCountryData = element.intlTelInput("getSelectedCountryData")
+        cleanNumber = element.intlTelInput("getCleanNumber")
+        prefixLength = selectedCountryData.dialCode.length + 1
+        cleanNumber.substring(0, prefixLength) + ' ' + cleanNumber.substring(prefixLength)
       else
         value.replace(/[^\d]/g, '')
 
@@ -67,7 +73,7 @@ angular.module("internationalPhoneNumber", []).directive 'internationalPhoneNumb
         ctrl.$setValidity 'international-phone-number', element.intlTelInput("isValidNumber")
       else
         value = ''
-        delete ctrl.$error['international-phone-number']
+        ctrl.$setValidity('international-phone-number', true)
       value
 
     element.on 'blur keyup change', (event) ->
